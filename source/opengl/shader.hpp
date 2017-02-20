@@ -4,14 +4,12 @@
 #include "base.hpp"
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 class ShaderPart: public GL_Base
 {
 public:
     ShaderPart(GLenum shader_type);
-    ~ShaderPart();
-    ShaderPart(ShaderPart&&) = default;
-    ShaderPart& operator=(ShaderPart&&) = default;
 
     GLuint get_id() const;
 };
@@ -19,17 +17,20 @@ public:
 class Shader: public GL_Base
 {
 public:
-    Shader(const std::string& vertex_d, const std::string& fragment_d, const std::string& geometry_d, bool is_from_file);
-    ~Shader();
-    Shader(Shader&&) = default;
-    Shader& operator=(Shader&&) = default;
+    // id_name must be unique or empty
+    // it is used for error log
+    Shader(const std::string& vertex_d, const std::string& fragment_d, const std::string& geometry_d, bool is_from_file,
+           const std::string& id_name = std::string());
 
     void bind() const;
     GLint getUniLocation(const std::string& uniform_name);
 
 private:
     static GLuint bound_id;
+    static std::vector<std::string> id_names;
+
     std::unordered_map<std::string, GLint> uniform_locations;
+    std::string id_name;
 
     std::string load_source_from_file(const std::string& filename);
     void load_uniform_locations();

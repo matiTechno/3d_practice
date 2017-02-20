@@ -36,6 +36,7 @@ App::App()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_RESIZABLE, 0);
+    //glfwWindowHint(GLFW_SAMPLES, 8);
 
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, 1);
@@ -67,11 +68,22 @@ App::App()
 
     glfwSwapInterval(1);
 
+    renderer_2D = std::make_unique<Renderer_2D>();
+
+    {
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+        pp_unit = std::make_unique<Postprocessor>(width, height);
+    }
+
+    set_opengl_states();
     run();
 }
 
 App::~App()
 {
+    renderer_2D.reset();
+    pp_unit.reset();
     glfwTerminate();
 }
 
@@ -116,14 +128,63 @@ void App::update(float)
 
 }
 
+#include "rendering/sprite.hpp"
+#include "rendering/text.hpp"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/constants.hpp>
+
 void App::render()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    //glViewport(0, 0, width, height);
+    pp_unit->set_new_size(width, height);
+    pp_unit->begRender();
+    {
+        glm::mat4 proj = glm::ortho(0.f, static_cast<float>(width),
+                                    static_cast<float>(height), 0.f);
+        renderer_2D->load_projection(proj);
 
+        Texture tex("res/block1_Jerom.png");
+        Sprite sprite;
+        sprite.position = glm::vec2(100.f, 100.f);
+        sprite.size = glm::vec2(100.f, 100.f);
+        sprite.color = glm::vec4(100.f, 0.f, 100.f, 1.f);
+        sprite.rotation_point = sprite.size / 2.f;
+        sprite.rotation = glm::pi<float>() / 4.f;
+        sprite.texture = &tex;
+        sprite.texCoords = glm::ivec4(0, 0, tex.getSize());
+        renderer_2D->render(sprite);
+
+        Sprite ctr;
+        ctr.position = sprite.position + sprite.rotation_point;
+        ctr.size = glm::vec2(4.f, 4.f);
+        renderer_2D->render(ctr);
+
+        Font font = font_loader.loadFont("res/Inconsolata-Regular.ttf", 40);
+        Text text(&font);
+        text.position = glm::vec2(250, 300);
+        text.text = "Hello World (OpenGL edition)!\nnew game coming";
+        text.color = glm::vec4(0.f, 255.f, 0.f, 1.f);
+        text.bloom = true;
+        renderer_2D->render(text);
+
+        Sprite bb_text;
+        bb_text.color.a = 0.3f;
+        bb_text.position = text.position;
+        bb_text.size = text.getSize();
+        bb_text.rotation = text.rotation;
+        bb_text.rotation_point = text.rotation_point;
+        renderer_2D->render(bb_text);
+    }
+    pp_unit->endRender();
+    pp_unit->render();
     glfwSwapBuffers(window);
 }
 
 void App::set_opengl_states()
 {
-
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }

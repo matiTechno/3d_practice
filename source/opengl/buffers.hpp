@@ -8,9 +8,6 @@ class VAO: public GL_Base
 {
 public:
     VAO();
-    ~VAO();
-    VAO(VAO&&) = default;
-    VAO& operator=(VAO&&) = default;
 
     void bind() const;
 
@@ -23,9 +20,6 @@ class BO: public GL_Base
 {
 public:
     BO();
-    ~BO();
-    BO(BO&&) = default;
-    BO& operator=(BO&&) = default;
 
     void bind(GLenum target) const;
 };
@@ -35,11 +29,8 @@ class FBO: public GL_Base
 {
 public:
     FBO();
-    ~FBO();
-    FBO(FBO&&) = default;
-    FBO& operator=(FBO&&) = default;
 
-    void bind(GLenum target) const;
+    void bind(GLenum target = GL_FRAMEBUFFER) const;
 };
 
 #endif // BUFFERS_HPP

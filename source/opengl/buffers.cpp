@@ -2,16 +2,10 @@
 
 GLuint VAO::bound_id = 0;
 
-VAO::VAO()
+VAO::VAO():
+    GL_Base([](GLuint id){glDeleteVertexArrays(1, &id);})
 {
     glGenVertexArrays(1, &id);
-
-}
-
-VAO::~VAO()
-{
-    if(!was_moved)
-        glDeleteVertexArrays(1, &id);
 }
 
 void VAO::bind() const
@@ -23,15 +17,10 @@ void VAO::bind() const
     }
 }
 
-BO::BO()
+BO::BO():
+    GL_Base([](GLuint id){glDeleteBuffers(1, &id);})
 {
     glGenBuffers(1, &id);
-}
-
-BO::~BO()
-{
-    if(!was_moved)
-        glDeleteBuffers(1, &id);
 }
 
 void BO::bind(GLenum target) const
@@ -39,15 +28,10 @@ void BO::bind(GLenum target) const
     glBindBuffer(target, id);
 }
 
-FBO::FBO()
+FBO::FBO():
+    GL_Base([](GLuint id){glDeleteFramebuffers(1, &id);})
 {
     glGenFramebuffers(1, &id);
-}
-
-FBO::~FBO()
-{
-    if(!was_moved)
-        glDeleteFramebuffers(1, &id);
 }
 
 void FBO::bind(GLenum target) const
