@@ -59,19 +59,19 @@ void Postprocessor::set_new_size(int width, int height)
     fbSize = glm::ivec2(width, height);
 
     fb_beg.bind();
-    tex_base = std::make_unique<Texture>(GL_RGB8, width, height);
-    tex_bright = std::make_unique<Texture>(GL_RGB8, width, height);
+    tex_base = std::make_unique<Texture>(GL_RGB16F, width, height);
+    tex_bright = std::make_unique<Texture>(GL_RGB16F, width, height);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_base->get_id(), 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, tex_bright->get_id(), 0);
     assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 
     fb_pp1.bind();
-    tex_pp1 = std::make_unique<Texture>(GL_RGB8, width / 2 , height / 2);
+    tex_pp1 = std::make_unique<Texture>(GL_RGB16F, width / 2, height / 2);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_pp1->get_id(), 0);
     assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 
     fb_pp2.bind();
-    tex_pp2 = std::make_unique<Texture>(GL_RGB8, width / 2, height / 2);
+    tex_pp2 = std::make_unique<Texture>(GL_RGB16F, width / 2, height / 2);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_pp2->get_id(), 0);
     assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 }
