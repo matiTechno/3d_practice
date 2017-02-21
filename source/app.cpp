@@ -36,8 +36,6 @@ App::App()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_RESIZABLE, 0);
-    //glfwWindowHint(GLFW_SAMPLES, 8);
-    //glfwWindowHint(GLFW_SRGB_CAPABLE, 1);
 
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, 1);
@@ -124,9 +122,9 @@ void App::processInput()
     glfwPollEvents();
 }
 
-void App::update(float)
+void App::update(float dt)
 {
-
+    (void)dt;
 }
 
 #include "rendering/sprite.hpp"
@@ -139,7 +137,7 @@ void App::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
-    //glViewport(0, 0, width, height);
+    glViewport(0, 0, width, height);
     pp_unit->set_new_size(width, height);
     pp_unit->begRender();
     {
@@ -147,11 +145,10 @@ void App::render()
                                     static_cast<float>(height), 0.f);
         renderer_2D->load_projection(proj);
 
-        Texture tex("res/block1_Jerom.png");
+        Texture tex("res/Candies_Jerom_CCBYSA3.png", true);
         Sprite sprite;
         sprite.position = glm::vec2(100.f, 100.f);
         sprite.size = glm::vec2(100.f, 100.f);
-        sprite.color = glm::vec4(100.f, 0.f, 100.f, 1.f);
         sprite.rotation_point = sprite.size / 2.f;
         sprite.rotation = glm::pi<float>() / 4.f;
         sprite.texture = &tex;
@@ -163,26 +160,22 @@ void App::render()
         ctr.size = glm::vec2(4.f, 4.f);
         renderer_2D->render(ctr);
 
-        Texture tex2("res/block1_Jerom.png", true);
-        sprite.texture = &tex2;
-        sprite.position = glm::vec2(300.f, 100.f);
-        renderer_2D->render(sprite);
-
         Font font = font_loader.loadFont("res/Inconsolata-Regular.ttf", 40);
         Text text(&font);
         text.position = glm::vec2(250, 300);
         text.text = "Hello World (OpenGL edition)!\nnew game coming";
-        text.color = glm::vec4(0.f, 255.f, 0.f, 1.f);
+        text.color = glm::vec4(0.f, 1.f, 0.f, 1.f);
         text.bloom = true;
-        renderer_2D->render(text);
 
         Sprite bb_text;
-        bb_text.color.a = 0.3f;
+        bb_text.color.a = 0.1f;
         bb_text.position = text.position;
         bb_text.size = text.getSize();
         bb_text.rotation = text.rotation;
         bb_text.rotation_point = text.rotation_point;
         renderer_2D->render(bb_text);
+
+        renderer_2D->render(text);
     }
     pp_unit->endRender();
     pp_unit->render();

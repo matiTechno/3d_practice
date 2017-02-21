@@ -77,7 +77,7 @@ void Renderer_2D::render(const Sprite& sprite) const
     glUniformMatrix4fv(shader->getUniLocation("model"), 1, GL_FALSE, &model[0][0]);
 
     auto& col = sprite.color;
-    glUniform4f(shader->getUniLocation("spriteColor"), col.x/255.f, col.y/255.f, col.z/255.f, col.w);
+    glUniform4f(shader->getUniLocation("spriteColor"), col.x, col.y, col.z, col.w);
 
     if(sprite.bloom)
         glUniform1f(shader->getUniLocation("isBloom"), true);
@@ -102,7 +102,7 @@ void Renderer_2D::render(const Text& text) const
         glUniform1f(shader->getUniLocation("isBloom"), false);
 
     auto& col = text.color;
-    glUniform4f(shader->getUniLocation("spriteColor"), col.x/255.f, col.y/255.f, col.z/255.f, col.w);
+    glUniform4f(shader->getUniLocation("spriteColor"), col.x, col.y, col.z, col.w);
 
     glm::vec2 pen_pos = text.position;
 

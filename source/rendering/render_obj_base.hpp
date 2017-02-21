@@ -8,7 +8,7 @@ class Render_obj_base
 {
 public:
     Render_obj_base():
-        color(255.f, 255.f, 255.f, 1.f),
+        color(1.f, 1.f, 1.f, 1.f),
         rotation(0.f),
         bloom(false)
     {}
