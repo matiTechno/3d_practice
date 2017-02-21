@@ -37,6 +37,7 @@ App::App()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_RESIZABLE, 0);
     //glfwWindowHint(GLFW_SAMPLES, 8);
+    //glfwWindowHint(GLFW_SRGB_CAPABLE, 1);
 
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, 1);
@@ -161,6 +162,11 @@ void App::render()
         ctr.position = sprite.position + sprite.rotation_point;
         ctr.size = glm::vec2(4.f, 4.f);
         renderer_2D->render(ctr);
+
+        Texture tex2("res/block1_Jerom.png", true);
+        sprite.texture = &tex2;
+        sprite.position = glm::vec2(300.f, 100.f);
+        renderer_2D->render(sprite);
 
         Font font = font_loader.loadFont("res/Inconsolata-Regular.ttf", 40);
         Text text(&font);
