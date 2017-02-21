@@ -11,6 +11,7 @@ class Postprocessor
 {
 public:
     Postprocessor(int width, int height);
+    Postprocessor(const Postprocessor&) = delete;
 
     void set_new_size(int width, int height);
 

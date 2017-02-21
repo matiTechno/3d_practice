@@ -14,6 +14,7 @@ class Renderer_2D
 {
 public:
     Renderer_2D();
+    Renderer_2D(const Renderer_2D&) = delete;
 
     void render(const Sprite& sprite) const;
     void render(const Text& text) const;

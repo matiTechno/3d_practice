@@ -34,6 +34,7 @@ class Font_loader
 public:
     Font_loader();
     ~Font_loader();
+    Font_loader(const Font_loader&) = delete;
 
     Font loadFont(const std::string& filename, unsigned size);
 

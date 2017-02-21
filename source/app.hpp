@@ -12,6 +12,7 @@ class App
 public:
     App();
     ~App();
+    App(const App&) = delete;
 
 private:
     GLFWwindow* window;
