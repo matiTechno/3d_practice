@@ -38,3 +38,19 @@ void FBO::bind(GLenum target) const
 {
     glBindFramebuffer(target, id);
 }
+
+RBO::RBO():
+    GL_Base([](GLuint id){glDeleteRenderbuffers(1, &id);})
+{
+    glGenRenderbuffers(1, &id);
+}
+
+void RBO::bind() const
+{
+    glBindRenderbuffer(GL_RENDERBUFFER, id);
+}
+
+GLuint RBO::get_id() const
+{
+    return id;
+}

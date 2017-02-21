@@ -17,7 +17,7 @@ public:
 
     void begRender();
     void endRender(bool set_default_fb = true);
-    void render();
+    void render(bool tone_mapping);
 
 private:
     static bool isCurrent;
@@ -29,6 +29,7 @@ private:
     Shader shader_blur, shader_blend;
     std::unique_ptr<Texture> tex_base, tex_bright, tex_pp1, tex_pp2;
     FBO fb_beg, fb_pp1, fb_pp2;
+    RBO rbo_depth;
 };
 
 #endif // POSTPROCESSOR_HPP

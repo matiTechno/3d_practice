@@ -42,6 +42,9 @@ Postprocessor::Postprocessor(int width, int height):
     };
     glDrawBuffers(2, attachments);
 
+    rbo_depth.bind();
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo_depth.get_id());
+
     shader_blend.bind();
     glUniform1i(shader_blend.getUniLocation("base"), 0);
     glUniform1i(shader_blend.getUniLocation("blur"), 1);
@@ -61,6 +64,8 @@ void Postprocessor::set_new_size(int width, int height)
     fb_beg.bind();
     tex_base = std::make_unique<Texture>(GL_RGB16F, width, height);
     tex_bright = std::make_unique<Texture>(GL_RGB16F, width, height);
+    rbo_depth.bind();
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_base->get_id(), 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, tex_bright->get_id(), 0);
     assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
@@ -79,7 +84,7 @@ void Postprocessor::set_new_size(int width, int height)
 void Postprocessor::begRender()
 {
     fb_beg.bind();
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Postprocessor::endRender(bool set_default_fb)
@@ -123,7 +128,7 @@ void Postprocessor::endRender(bool set_default_fb)
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Postprocessor::render()
+void Postprocessor::render(bool tone_mapping)
 {
     vao.bind();
     shader_blend.bind();
@@ -131,5 +136,11 @@ void Postprocessor::render()
     sampler.bind(1);
     tex_base->bind(0);
     tex_pp2->bind(1);
+
+    if(tone_mapping)
+        glUniform1f(shader_blend.getUniLocation("is_tone_mapping"), true);
+    else
+        glUniform1f(shader_blend.getUniLocation("is_tone_mapping"), false);
+
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }

@@ -33,4 +33,15 @@ public:
     void bind(GLenum target = GL_FRAMEBUFFER) const;
 };
 
+// renderbuffer object
+class RBO: public GL_Base
+{
+public:
+    RBO();
+
+    void bind() const;
+
+    GLuint get_id() const;
+};
+
 #endif // BUFFERS_HPP

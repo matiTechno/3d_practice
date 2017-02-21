@@ -75,12 +75,20 @@ App::App()
         pp_unit = std::make_unique<Postprocessor>(width, height);
     }
 
+    // for rendering testing
+    font = std::make_unique<Font>(font_loader.loadFont("res/Inconsolata-Regular.ttf", 40));
+    texture = std::make_unique<Texture>("res/Candies_Jerom_CCBYSA3.png", true);
+
     set_opengl_states();
     run();
 }
 
 App::~App()
 {
+    // for rendering testing
+    font.reset();
+    texture.reset();
+
     renderer_2D.reset();
     pp_unit.reset();
     glfwTerminate();
@@ -145,14 +153,13 @@ void App::render()
                                     static_cast<float>(height), 0.f);
         renderer_2D->load_projection(proj);
 
-        Texture tex("res/Candies_Jerom_CCBYSA3.png", true);
         Sprite sprite;
         sprite.position = glm::vec2(100.f, 100.f);
         sprite.size = glm::vec2(100.f, 100.f);
         sprite.rotation_point = sprite.size / 2.f;
         sprite.rotation = glm::pi<float>() / 4.f;
-        sprite.texture = &tex;
-        sprite.texCoords = glm::ivec4(0, 0, tex.getSize());
+        sprite.texture = texture.get();
+        sprite.texCoords = glm::ivec4(0, 0, texture->getSize());
         renderer_2D->render(sprite);
 
         Sprite ctr;
@@ -160,15 +167,14 @@ void App::render()
         ctr.size = glm::vec2(4.f, 4.f);
         renderer_2D->render(ctr);
 
-        Font font = font_loader.loadFont("res/Inconsolata-Regular.ttf", 40);
-        Text text(&font);
+        Text text(font.get());
         text.position = glm::vec2(250, 300);
         text.text = "Hello World (OpenGL edition)!\nnew game coming";
         text.color = glm::vec4(0.f, 1.f, 0.f, 1.f);
         text.bloom = true;
 
         Sprite bb_text;
-        bb_text.color.a = 0.1f;
+        bb_text.color.a = 0.05f;
         bb_text.position = text.position;
         bb_text.size = text.getSize();
         bb_text.rotation = text.rotation;
@@ -178,7 +184,7 @@ void App::render()
         renderer_2D->render(text);
     }
     pp_unit->endRender();
-    pp_unit->render();
+    pp_unit->render(true);
     glfwSwapBuffers(window);
 }
 
@@ -186,4 +192,5 @@ void App::set_opengl_states()
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glEnable(GL_DEPTH_TEST);
 }

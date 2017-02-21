@@ -29,6 +29,10 @@ private:
     static bool isCurrent;
 
     static void error_callback(int error, const char* description);
+
+    // for testing
+    std::unique_ptr<Font> font;
+    std::unique_ptr<Texture> texture;
 };
 
 #endif // APP_HPP
