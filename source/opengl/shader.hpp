@@ -23,7 +23,7 @@ public:
            const std::string& id_name = std::string());
 
     void bind() const;
-    GLint getUniLocation(const std::string& uniform_name);
+    GLint getUniLocation(const std::string& uniform_name) const;
 
 private:
     static GLuint bound_id;

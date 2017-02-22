@@ -81,13 +81,13 @@ void Postprocessor::set_new_size(int width, int height)
     assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 }
 
-void Postprocessor::begRender()
+void Postprocessor::begRender() const
 {
     fb_beg.bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Postprocessor::endRender(bool set_default_fb)
+void Postprocessor::endRender(bool set_default_fb) const
 {
     vao.bind();
     shader_blur.bind();
@@ -128,7 +128,7 @@ void Postprocessor::endRender(bool set_default_fb)
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Postprocessor::render(bool tone_mapping)
+void Postprocessor::render(bool tone_mapping) const
 {
     vao.bind();
     shader_blend.bind();

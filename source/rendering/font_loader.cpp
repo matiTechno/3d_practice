@@ -36,7 +36,7 @@ Font_loader::~Font_loader()
     FT_Done_FreeType(ftLib);
 }
 
-Font Font_loader::loadFont(const std::string& filename, unsigned size)
+Font Font_loader::loadFont(const std::string& filename, unsigned size) const
 {
     FT_Face face;
     FT_Error error = FT_New_Face(ftLib, filename.c_str(), 0, &face);

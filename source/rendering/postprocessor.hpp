@@ -15,9 +15,9 @@ public:
 
     void set_new_size(int width, int height);
 
-    void begRender();
-    void endRender(bool set_default_fb = true);
-    void render(bool tone_mapping);
+    void begRender() const;
+    void endRender(bool set_default_fb = true) const;
+    void render(bool tone_mapping) const;
 
 private:
     static bool isCurrent;

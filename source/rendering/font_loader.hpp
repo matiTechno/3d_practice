@@ -36,7 +36,7 @@ public:
     ~Font_loader();
     Font_loader(const Font_loader&) = delete;
 
-    Font loadFont(const std::string& filename, unsigned size);
+    Font loadFont(const std::string& filename, unsigned size) const;
 
 private:
     static bool isCurrent;

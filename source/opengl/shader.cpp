@@ -96,7 +96,7 @@ void Shader::bind() const
     }
 }
 
-GLint Shader::getUniLocation(const std::string& uniform_name)
+GLint Shader::getUniLocation(const std::string& uniform_name) const
 {
     auto uniform_loc = uniform_locations.find(uniform_name);
     std::string pre_msg;

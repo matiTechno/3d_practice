@@ -8,7 +8,7 @@ QMAKE_CXXFLAGS += -pedantic
 
 DEFINES += GLM_FORCE_NO_CTOR_INIT
 
-LIBS += -lglfw -lGL -ldl -lfreetype
+LIBS += -lglfw -lGL -ldl -lfreetype -lassimp
 
 INCLUDEPATH += /usr/include/freetype2
 

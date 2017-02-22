@@ -173,7 +173,7 @@ void Renderer_2D::render(const Text& text) const
     }
 }
 
-void Renderer_2D::load_projection(const glm::mat4& matrix)
+void Renderer_2D::load_projection(const glm::mat4& matrix) const
 {
     shader->bind();
     glUniformMatrix4fv(shader->getUniLocation("projection"), 1, GL_FALSE, &matrix[0][0]);

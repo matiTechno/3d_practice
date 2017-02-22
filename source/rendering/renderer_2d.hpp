@@ -19,7 +19,7 @@ public:
     void render(const Sprite& sprite) const;
     void render(const Text& text) const;
 
-    void load_projection(const glm::mat4& matrix);
+    void load_projection(const glm::mat4& matrix) const;
 
 private:
     static bool isCurrent;
