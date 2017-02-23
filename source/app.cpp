@@ -1,7 +1,5 @@
 #include "app.hpp"
 #include <assert.h>
-#include "glad/glad.h"
-#include <GLFW/glfw3.h>
 #include <iostream>
 #include <chrono>
 #include <stdexcept>
@@ -68,6 +66,7 @@ App::App()
     glfwSwapInterval(1);
 
     renderer_2D = std::make_unique<Renderer_2D>();
+    renderer_3D = std::make_unique<Renderer_3D>();
 
     {
         int width, height;
@@ -75,23 +74,13 @@ App::App()
         pp_unit = std::make_unique<Postprocessor>(width, height);
     }
 
-    // for rendering testing
+    // for testing
     font = std::make_unique<Font>(font_loader.loadFont("res/Inconsolata-Regular.ttf", 40));
     texture = std::make_unique<Texture>("res/Candies_Jerom_CCBYSA3.png", true);
+    model = std::make_unique<Model_3D>("res/monkey.obj");
 
     set_opengl_states();
     run();
-}
-
-App::~App()
-{
-    // for rendering testing
-    font.reset();
-    texture.reset();
-
-    renderer_2D.reset();
-    pp_unit.reset();
-    glfwTerminate();
 }
 
 void App::run()
@@ -149,6 +138,8 @@ void App::render()
     pp_unit->set_new_size(width, height);
     pp_unit->begRender();
     {
+        renderer_3D->render(*model);
+
         glm::mat4 proj = glm::ortho(0.f, static_cast<float>(width),
                                     static_cast<float>(height), 0.f);
         renderer_2D->load_projection(proj);

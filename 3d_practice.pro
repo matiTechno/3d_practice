@@ -22,7 +22,10 @@ SOURCES += source/main.cpp \
     source/rendering/font_loader.cpp \
     source/rendering/postprocessor.cpp \
     source/rendering/text.cpp \
-    source/opengl/base.cpp
+    source/opengl/base.cpp \
+    source/rendering/mesh.cpp \
+    source/rendering/model_3d.cpp \
+    source/rendering/renderer_3d.cpp
 
 HEADERS += source/app.hpp \
     source/glad/glad.h \
@@ -36,11 +39,16 @@ HEADERS += source/app.hpp \
     source/rendering/text.hpp \
     source/rendering/font_loader.hpp \
     source/rendering/postprocessor.hpp \
-    source/rendering/render_obj_base.hpp
+    source/rendering/render_obj_base.hpp \
+    source/rendering/mesh.hpp \
+    source/rendering/model_3d.hpp \
+    source/rendering/renderer_3d.hpp
 
 DISTFILES += \
     shaders/shader_2d.frag \
     shaders/shader_2d.vert \
     shaders/shader_fb.vert \
     shaders/shader_fb_blur.frag \
-    shaders/shader_fb_blend.frag
+    shaders/shader_fb_blend.frag \
+    shaders/shader_3d.frag \
+    shaders/shader_3d.vert
