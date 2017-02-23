@@ -81,7 +81,7 @@ App::App()
     font = std::make_unique<Font>(font_loader.loadFont("res/Inconsolata-Regular.ttf", 40));
     texture = std::make_unique<Texture>("res/Candies_Jerom_CCBYSA3.png", true);
     model = std::make_unique<Model_3D>("res/monkey.obj");
-    model->position.z = -5.f;
+    model->position.z = -3.f;
 
     set_opengl_states();
     run();
@@ -128,6 +128,8 @@ void App::update(float dt)
     static float time = 0.f;
     time += dt;
     model->position.x = glm::sin(2.f * glm::pi<float>() * time / 10.f) * 3.f;
+
+    frametime_panel = dt;
 }
 
 #include "rendering/sprite.hpp"
@@ -153,6 +155,7 @@ void App::render()
             glm::mat4 proj = glm::perspective(glm::pi<float>() / 2.f,
                                               static_cast<float>(width) / static_cast<float>(height), 0.1f, 100.f);
             renderer_3D->load_projection(proj);
+            renderer_3D->load_view_matrix(camera.get_view_matrix());
         }
 
         Sprite sprite;
@@ -170,7 +173,7 @@ void App::render()
         renderer_2D->render(ctr);
 
         Text text(font.get());
-        text.position = glm::vec2(250, 300);
+        text.position = glm::vec2(250, 500);
         text.text = "Hello World (OpenGL edition)!\nnew game coming";
         text.color = glm::vec4(0.f, 1.f, 0.f, 1.f);
         text.bloom = true;
@@ -184,6 +187,14 @@ void App::render()
         renderer_2D->render(bb_text);
 
         renderer_2D->render(text);
+
+        Text fps_panel(font.get());
+        fps_panel.position = glm::vec2(10.f, 10.f);
+        fps_panel.text = "frametime: " + std::to_string(frametime_panel) + "\nfps: "
+                + std::to_string(static_cast<int>(1.f / frametime_panel + 0.5f));
+        fps_panel.color = glm::vec4(1.f, 0.f, 0.f, 1.f);
+        fps_panel.bloom = true;
+        renderer_2D->render(fps_panel);
     }
     pp_unit->endRender();
     pp_unit->render(true);

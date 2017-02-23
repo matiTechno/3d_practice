@@ -10,6 +10,7 @@
 #include "rendering/renderer_3d.hpp"
 // for testing
 #include "rendering/model_3d.hpp"
+#include "rendering/camera_3d.hpp"
 
 class Del_glfw
 {
@@ -36,6 +37,7 @@ private:
     std::unique_ptr<Postprocessor> pp_unit;
     Font_loader font_loader;
     std::unique_ptr<Renderer_3D> renderer_3D;
+    Camera_3D camera;
 
     void run();
     void processInput();
@@ -51,6 +53,7 @@ private:
     std::unique_ptr<Font> font;
     std::unique_ptr<Texture> texture;
     std::unique_ptr<Model_3D> model;
+    float frametime_panel;
 };
 
 #endif // APP_HPP

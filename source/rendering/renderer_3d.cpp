@@ -23,7 +23,9 @@ void Renderer_3D::render(const Model_3D& model) const
     mat_model = glm::rotate(mat_model, model.rotation.z, glm::vec3(0.f, 0.f, 1.f));
     mat_model = glm::scale(mat_model, model.scale);
 
-    glUniformMatrix4fv(shader.getUniLocation("model"), 1, GL_FALSE, &mat_model[0][0]);
+    glm::mat4 model_view_matrix = view_matrix * mat_model;
+
+    glUniformMatrix4fv(shader.getUniLocation("model_view"), 1, GL_FALSE, &model_view_matrix[0][0]);
 
     model.mesh->vao.bind();
     glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(model.mesh->num_indices),

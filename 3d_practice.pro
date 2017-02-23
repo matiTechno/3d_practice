@@ -25,7 +25,8 @@ SOURCES += source/main.cpp \
     source/opengl/base.cpp \
     source/rendering/mesh.cpp \
     source/rendering/model_3d.cpp \
-    source/rendering/renderer_3d.cpp
+    source/rendering/renderer_3d.cpp \
+    source/rendering/camera_3d.cpp
 
 HEADERS += source/app.hpp \
     source/glad/glad.h \
@@ -42,7 +43,8 @@ HEADERS += source/app.hpp \
     source/rendering/render_obj_base.hpp \
     source/rendering/mesh.hpp \
     source/rendering/model_3d.hpp \
-    source/rendering/renderer_3d.hpp
+    source/rendering/renderer_3d.hpp \
+    source/rendering/camera_3d.hpp
 
 DISTFILES += \
     shaders/shader_2d.frag \
