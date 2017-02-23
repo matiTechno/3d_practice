@@ -4,6 +4,9 @@
 #include <chrono>
 #include <stdexcept>
 #include <string>
+// for testing
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/constants.hpp>
 
 bool App::isCurrent  = false;
 
@@ -78,6 +81,7 @@ App::App()
     font = std::make_unique<Font>(font_loader.loadFont("res/Inconsolata-Regular.ttf", 40));
     texture = std::make_unique<Texture>("res/Candies_Jerom_CCBYSA3.png", true);
     model = std::make_unique<Model_3D>("res/monkey.obj");
+    model->position.z = -5.f;
 
     set_opengl_states();
     run();
@@ -121,13 +125,13 @@ void App::processInput()
 
 void App::update(float dt)
 {
-    (void)dt;
+    static float time = 0.f;
+    time += dt;
+    model->position.x = glm::sin(2.f * glm::pi<float>() * time / 10.f) * 3.f;
 }
 
 #include "rendering/sprite.hpp"
 #include "rendering/text.hpp"
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/constants.hpp>
 
 void App::render()
 {
@@ -140,9 +144,16 @@ void App::render()
     {
         renderer_3D->render(*model);
 
-        glm::mat4 proj = glm::ortho(0.f, static_cast<float>(width),
-                                    static_cast<float>(height), 0.f);
-        renderer_2D->load_projection(proj);
+        {
+            glm::mat4 proj = glm::ortho(0.f, static_cast<float>(width),
+                                        static_cast<float>(height), 0.f);
+            renderer_2D->load_projection(proj);
+        }
+        {
+            glm::mat4 proj = glm::perspective(glm::pi<float>() / 2.f,
+                                              static_cast<float>(width) / static_cast<float>(height), 0.1f, 100.f);
+            renderer_3D->load_projection(proj);
+        }
 
         Sprite sprite;
         sprite.position = glm::vec2(100.f, 100.f);
@@ -183,5 +194,4 @@ void App::set_opengl_states()
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //glEnable(GL_DEPTH_TEST);
 }
