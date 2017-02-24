@@ -44,7 +44,8 @@ HEADERS += source/app.hpp \
     source/rendering/mesh.hpp \
     source/rendering/model_3d.hpp \
     source/rendering/renderer_3d.hpp \
-    source/rendering/camera_3d.hpp
+    source/rendering/camera_3d.hpp \
+    source/key_input.hpp
 
 DISTFILES += \
     shaders/shader_2d.frag \

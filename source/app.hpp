@@ -8,6 +8,7 @@
 #include "rendering/postprocessor.hpp"
 #include "rendering/font_loader.hpp"
 #include "rendering/renderer_3d.hpp"
+#include "key_input.hpp"
 // for testing
 #include "rendering/model_3d.hpp"
 #include "rendering/camera_3d.hpp"
@@ -48,6 +49,8 @@ private:
     static bool isCurrent;
 
     static void error_callback(int error, const char* description);
+    static void key_callback(GLFWwindow*, int key, int, int action, int);
+    static Key_input key_input;
 
     // for testing
     std::unique_ptr<Font> font;

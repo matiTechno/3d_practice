@@ -10,9 +10,19 @@
 
 bool App::isCurrent  = false;
 
+Key_input App::key_input;
+
 void App::error_callback(int, const char* description)
 {
     std::cout << "glfw error: " << description << std::endl;
+}
+
+void App::key_callback(GLFWwindow*, int key, int, int action, int)
+{
+    if(action == GLFW_PRESS)
+        key_input.press_event(key);
+    else if(action == GLFW_RELEASE)
+        key_input.release_event(key);
 }
 
 App::App()
@@ -48,6 +58,8 @@ App::App()
     if(!window)
         throw std::runtime_error("glfw window creation failed");
 
+    glfwSetKeyCallback(window, key_callback);
+
     auto monitor = glfwGetPrimaryMonitor();
     auto video_mode = glfwGetVideoMode(monitor);
     int win_width, win_height;
@@ -77,7 +89,6 @@ App::App()
         pp_unit = std::make_unique<Postprocessor>(width, height);
     }
 
-    // for testing
     font = std::make_unique<Font>(font_loader.loadFont("res/Inconsolata-Regular.ttf", 40));
     texture = std::make_unique<Texture>("res/Candies_Jerom_CCBYSA3.png", true);
     model = std::make_unique<Model_3D>("res/monkey.obj");
@@ -106,8 +117,8 @@ void App::run()
 
         if(acc_time > 1.f)
         {
-            std::cout << "frametime: " << acc_time / static_cast<float>(frame_count) << '\r';
-            std::cout.flush();
+            //std::cout << "frametime: " << acc_time / static_cast<float>(frame_count) << '\r';
+            //std::cout.flush();
             acc_time = 0.f;
             frame_count = 0;
         }
@@ -120,16 +131,35 @@ void App::run()
 
 void App::processInput()
 {
+    key_input.start_new_frame();
     glfwPollEvents();
+
+    if(key_input.was_pressed(GLFW_KEY_ESCAPE))
+        glfwSetWindowShouldClose(window, true);
 }
 
 void App::update(float dt)
 {
-    static float time = 0.f;
-    time += dt;
-    model->position.x = glm::sin(2.f * glm::pi<float>() * time / 10.f) * 3.f;
+    model->rotation.y += 2.f * glm::pi<float>() * dt / 30.f;
 
     frametime_panel = dt;
+
+    if(key_input.is_pressed(GLFW_KEY_W))
+        camera.move(Cam_move_dir::forward, dt);
+    if(key_input.is_pressed(GLFW_KEY_S))
+        camera.move(Cam_move_dir::backward, dt);
+    if(key_input.is_pressed(GLFW_KEY_A))
+        camera.move(Cam_move_dir::left, dt);
+    if(key_input.is_pressed(GLFW_KEY_D))
+        camera.move(Cam_move_dir::right, dt);
+    if(key_input.is_pressed(GLFW_KEY_UP))
+        camera.rotate(Cam_rotation_dir::up, dt);
+    if(key_input.is_pressed(GLFW_KEY_DOWN))
+        camera.rotate(Cam_rotation_dir::down, dt);
+    if(key_input.is_pressed(GLFW_KEY_LEFT))
+        camera.rotate(Cam_rotation_dir::left, dt);
+    if(key_input.is_pressed(GLFW_KEY_RIGHT))
+        camera.rotate(Cam_rotation_dir::right, dt);
 }
 
 #include "rendering/sprite.hpp"
@@ -189,6 +219,7 @@ void App::render()
         renderer_2D->render(text);
 
         Text fps_panel(font.get());
+        fps_panel.set_pixel_size(25);
         fps_panel.position = glm::vec2(10.f, 10.f);
         fps_panel.text = "frametime: " + std::to_string(frametime_panel) + "\nfps: "
                 + std::to_string(static_cast<int>(1.f / frametime_panel + 0.5f));
