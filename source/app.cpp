@@ -219,7 +219,7 @@ void App::render()
         renderer_2D->render(text);
 
         Text fps_panel(font.get());
-        fps_panel.set_pixel_size(25);
+        //fps_panel.set_pixel_size(25);
         fps_panel.position = glm::vec2(10.f, 10.f);
         fps_panel.text = "frametime: " + std::to_string(frametime_panel) + "\nfps: "
                 + std::to_string(static_cast<int>(1.f / frametime_panel + 0.5f));

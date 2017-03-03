@@ -25,8 +25,8 @@ struct Font
     unsigned pixel_size;
 };
 
-
 // no kerning support for now
+// but FreeType does not have true kerning support
 // to do: implement valve solution
 // for better font rendering
 class Font_loader

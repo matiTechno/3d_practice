@@ -7,6 +7,7 @@ class Renderer_2D;
 #include "render_obj_base.hpp"
 
 // no kerning support for now
+// but FreeType does not have true kerning support
 class Text: public Render_obj_base
 {
 public:
